@@ -6,7 +6,6 @@ import nl.androidappfactory.spring6reactive.domain.Beer;
 import nl.androidappfactory.spring6reactive.repositories.BeerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

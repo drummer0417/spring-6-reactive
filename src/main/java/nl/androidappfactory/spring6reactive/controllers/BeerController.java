@@ -2,7 +2,6 @@ package nl.androidappfactory.spring6reactive.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nl.androidappfactory.spring6reactive.domain.Beer;
 import nl.androidappfactory.spring6reactive.mappers.BeerMapper;
 import nl.androidappfactory.spring6reactive.model.BeerDto;
 import org.springframework.web.bind.annotation.GetMapping;
