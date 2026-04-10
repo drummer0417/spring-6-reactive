@@ -5,20 +5,28 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PersonRepositoryImpl implements PersonRepository {
 
-    Person nobudy = Person.builder().firstName("dummy").lastName("Nobody").id(0).build();
-    Person hans = Person.builder().firstName("Hans").lastName("Jansen").id(1).build();
+    Person hans = new Person(1, "Hans", "Jansen");
     Person jacky = Person.builder().firstName("Jacky").lastName("Pieterse").id(2).build();
     Person cas = Person.builder().firstName("Cas").lastName("Johnson").id(3).build();
     Person anouk = Person.builder().firstName("Anouk").lastName("Jackson").id(4).build();
-    List<Person> persons = Arrays.asList(nobudy, hans, jacky, cas, anouk);
+
+    Map<Integer, Person> persons = Map.of(
+            hans.getId(), hans,
+            jacky.getId(), jacky,
+            cas.getId(), cas,
+            anouk.getId(), anouk
+    );
+
 
     @Override
     public Mono<Person> getById(Integer id) {
-        return Mono.just(persons.get(id));
+        return Mono.justOrEmpty(persons.get(id));
     }
 
     @Override

@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.util.List;import static org.junit.jupiter.api.Assertions.assertEquals;import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class PersonRepositoryImplTest {
 
@@ -81,5 +82,46 @@ class PersonRepositoryImplTest {
                 .filter(person -> person.getFirstName().equals("Hans")).next();
 
         personMono.subscribe(System.out::println);
+    }
+
+    @Test
+    void findByNonExistingId() {
+
+        Integer id = 31;
+        Flux<Person> personFlux = personRepository.findAll();
+
+        Mono<Person> personMono = personFlux
+                .filter(person -> person.getId().equals(id))
+                .single()
+                .doOnError(throwable -> {
+                    System.out.println(throwable.getMessage());
+                    System.out.println("Error on flux");
+                });
+
+        personMono.subscribe(System.out::println, throwable -> System.out.println("Error on mono"));
+    }
+
+    @Test
+    void findByNonExistingId2() {
+
+        final Integer id = 31;
+        Flux<Person> personFlux = personRepository.findAll();
+
+        Mono<Person> personMono = personFlux
+                .filter(person -> person.getId().equals(id))
+                .next();
+        assertNotEquals(Boolean.TRUE, personMono.hasElement().block());
+    }
+
+    @Test
+    void findByExistingId() {
+
+        final Integer id = 3;
+        Flux<Person> personFlux = personRepository.findAll();
+
+        Mono<Person> personMono = personFlux
+                .filter(person -> person.getId().equals(id))
+                .next();
+        assertEquals(Boolean.TRUE, personMono.hasElement().block());
     }
 }
