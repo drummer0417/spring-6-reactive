@@ -3,9 +3,9 @@ package nl.androidappfactory.spring6reactive.repositories;
 import nl.androidappfactory.spring6reactive.domain.Person;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Mono;import reactor.test.StepVerifier;
 
-import java.util.List;import static org.junit.jupiter.api.Assertions.assertEquals;import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.List;import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class PersonRepositoryImplTest {
@@ -123,5 +123,19 @@ class PersonRepositoryImplTest {
                 .filter(person -> person.getId().equals(id))
                 .next();
         assertEquals(Boolean.TRUE, personMono.hasElement().block());
+    }
+
+    @Test
+    void findByExistingIdWithStepVerifier() {
+
+        final Integer id = 3;
+        Flux<Person> personFlux = personRepository.findAll();
+
+        Mono<Person> personMono = personFlux
+                .filter(person -> person.getId().equals(id))
+                .next();
+        StepVerifier.create(personMono).expectNextCount(1).verifyComplete();
+
+        personMono.hasElement().block();
     }
 }
