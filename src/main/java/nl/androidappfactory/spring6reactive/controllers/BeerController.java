@@ -35,7 +35,7 @@ public class BeerController {
         return beerService.saveBeer(beerDto)
                 .map(savedDto -> ResponseEntity
                         .created(UriComponentsBuilder
-                                .fromPath("http://localhost:8080" + BEER_PATH + "/" + savedDto.getId())
+                                .fromUriString("http://localhost:8080" + BEER_PATH + "/" + savedDto.getId())
                                 .build().toUri()).build());
     }
 
@@ -51,8 +51,8 @@ public class BeerController {
                 .map(patchedBeer -> ResponseEntity.noContent().build());
     }
 
-    @DeleteMapping( BEER_PATH_ID)
+    @DeleteMapping(BEER_PATH_ID)
     Mono<ResponseEntity<Void>> delete(@PathVariable Integer id) {
-        return beerService.delete(id).map(emptyMon -> ResponseEntity.ok().build());
+        return beerService.delete(id).thenReturn(ResponseEntity.noContent().build());
     }
 }
